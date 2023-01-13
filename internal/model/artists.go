@@ -1,5 +1,9 @@
 package model
 
+type SearchResponse struct {
+	Artists Artists `json:"artists"`
+}
+
 type Artists struct {
 	Href     string `json:"href"`
 	Items    []Item `json:"items"`
