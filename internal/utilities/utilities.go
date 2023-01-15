@@ -1,8 +1,8 @@
-package mrf
+package utilities
 
 import "strings"
 
-func stringFormatter(rawString []string) string {
+func StringFormatter(rawString []string) string {
 
 	if len(rawString) > 1 {
 		return strings.Join(rawString, "+")

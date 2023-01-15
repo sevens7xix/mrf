@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/sevens7xix/mrf/internal/model"
+	"github.com/sevens7xix/mrf/internal/utilities"
 )
 
 func getBearerToken() (string, error) {
@@ -43,7 +44,7 @@ func getBearerToken() (string, error) {
 
 func GetArtistID(artist []string) (string, error) {
 
-	artist_query := stringFormatter(artist)
+	artist_query := utilities.StringFormatter(artist)
 
 	url := fmt.Sprintf("https://api.spotify.com/v1/search?q=%s&type=artist", artist_query)
 	request, err := http.NewRequest("GET", url, nil)
