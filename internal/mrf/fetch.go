@@ -24,7 +24,7 @@ func GetBearerToken(client ServiceClient) (string, error) {
 		return "", fmt.Errorf("error crafting the token request '%s'", err)
 	}
 
-	encoded_credentials := base64.StdEncoding.EncodeToString([]byte("1ee8476c57ec4555b721604253f06873:70f060cc2ae7465ebb4564b71b34b7a6"))
+	encoded_credentials := base64.StdEncoding.EncodeToString([]byte("VIPER_IMPLEMENTATION:VIPER_IMPLEMENTATION"))
 
 	req.Header.Set("Authorization", fmt.Sprintf("Basic %s", encoded_credentials))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
