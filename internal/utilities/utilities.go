@@ -21,7 +21,7 @@ func GetCredentials() ([]string, error) {
 
 	viper.SetConfigName("credentials")
 	viper.SetConfigType("env")
-	viper.AddConfigPath("../mrf")
+	viper.AddConfigPath("/home/saroui/Documents/mrf")
 
 	err := viper.ReadInConfig()
 
