@@ -24,7 +24,16 @@ func GetBearerToken(client ServiceClient) (string, error) {
 		return "", fmt.Errorf("error crafting the token request '%s'", err)
 	}
 
-	encoded_credentials := base64.StdEncoding.EncodeToString([]byte("VIPER_IMPLEMENTATION:VIPER_IMPLEMENTATION"))
+	// We're going to get the credentials from the .env file, and later pass to the base64 encoder
+	credentials, err := utilities.GetCredentials()
+
+	if err != nil {
+		return "", fmt.Errorf("problem getting the app credentials '%s'", err)
+	}
+
+	credentials_string := fmt.Sprintf("%s:%s", credentials[0], credentials[1])
+
+	encoded_credentials := base64.StdEncoding.EncodeToString([]byte(credentials_string))
 
 	req.Header.Set("Authorization", fmt.Sprintf("Basic %s", encoded_credentials))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
