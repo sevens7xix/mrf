@@ -5,10 +5,9 @@ import (
 	"net/http"
 )
 
-func (s *Service) getAlbumsRequest(artistURL string) (*http.Request, error) {
-	newURL := fmt.Sprintf("%s/albums?market=US&limit=5", artistURL)
+func (s *Service) createTracksRequest(URL string) (*http.Request, error) {
 
-	req, err := http.NewRequest("GET", newURL, nil)
+	req, err := http.NewRequest("GET", URL, nil)
 
 	if err != nil {
 		return nil, err

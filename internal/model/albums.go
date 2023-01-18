@@ -27,6 +27,10 @@ type AlbumItem struct {
 	URI                  string           `json:"uri"`
 }
 
+func (a AlbumItem) GetName() string {
+	return a.Name
+}
+
 type AlbumArtists struct {
 	ExternalUrls ExternalUrls `json:"external_urls"`
 	Href         string       `json:"href"`
