@@ -9,7 +9,7 @@ import (
 type IService interface {
 	GetBearerToken() (string, error)
 	GetArtistID() (string, error)
-	CreateTracksRequest(URL string) (*http.Request, error)
+	createTracksRequest(URL string) (*http.Request, error)
 	GetProcessedItems() (string, error)
 }
 
