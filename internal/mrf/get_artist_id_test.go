@@ -6,11 +6,12 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/sevens7xix/mrf/internal/utilities"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetBearerToken(t *testing.T) {
-	client := NewTestClient(func(req *http.Request) *http.Response {
+	client := utilities.NewTestClient(func(req *http.Request) *http.Response {
 		return &http.Response{
 			StatusCode: 200,
 			Body:       io.NopCloser(bytes.NewBufferString(`{"access_token":"Getting credentials..."}`)),
@@ -28,7 +29,7 @@ func TestGetBearerToken(t *testing.T) {
 }
 
 func TestGetArtistIdHappyPath(t *testing.T) {
-	client := NewTestClient(func(req *http.Request) *http.Response {
+	client := utilities.NewTestClient(func(req *http.Request) *http.Response {
 		return &http.Response{
 			StatusCode: 200,
 			Body: io.NopCloser(bytes.NewBufferString(`{
@@ -63,7 +64,7 @@ func TestGetArtistIdHappyPath(t *testing.T) {
 }
 
 func TestGetArtistIdUnhappyPath(t *testing.T) {
-	client := NewTestClient(func(req *http.Request) *http.Response {
+	client := utilities.NewTestClient(func(req *http.Request) *http.Response {
 		return &http.Response{
 			StatusCode: 200,
 			Body: io.NopCloser(bytes.NewBufferString(`{
