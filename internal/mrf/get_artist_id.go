@@ -53,9 +53,9 @@ func (s *Service) GetBearerToken() (string, error) {
 	return result["access_token"], nil
 }
 
-func (s *Service) GetArtistID(artist []string) (string, error) {
+func (s *Service) GetArtistID() (string, error) {
 
-	artist_query := utilities.StringFormatter(artist)
+	artist_query := utilities.StringFormatter(s.Artist)
 
 	url := fmt.Sprintf("https://api.spotify.com/v1/search?q=%s&type=artist", artist_query)
 	request, err := http.NewRequest("GET", url, nil)

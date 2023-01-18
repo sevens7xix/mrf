@@ -2,14 +2,20 @@ package mrf
 
 import (
 	"net/http"
+
+	"github.com/sevens7xix/mrf/internal/model"
 )
 
-type Service struct {
-	Client *http.Client
+type IService interface {
+	GetBearerToken() (string, error)
+	GetArtistID() (string, error)
+	CreateTracksRequest(URL string) (*http.Request, error)
+	GetProcessedItems() (string, error)
 }
 
-func NewService(client *http.Client) *Service {
-	return &Service{
-		Client: client,
-	}
+type Service struct {
+	Artist []string
+	URI    string
+	Client *http.Client
+	Model  model.ProcessedResponse
 }

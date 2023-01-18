@@ -10,6 +10,11 @@ type Albums struct {
 	Total    int         `json:"total"`
 }
 
+func (a Albums) GetItems() []ProcessedItem {
+	items := CastToProcessedItem(a.Items)
+	return items
+}
+
 type AlbumItem struct {
 	AlbumGroup           string           `json:"album_group"`
 	AlbumType            string           `json:"album_type"`

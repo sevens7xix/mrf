@@ -2,7 +2,6 @@ package mrf
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/sevens7xix/mrf/internal/mrf"
@@ -20,9 +19,8 @@ var rootCMD = &cobra.Command{
 	Version: version,
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		client := &http.Client{}
-		serviceClient := mrf.NewService(client)
-		serviceClient.GetTracks(bestTracks, false, args)
+
+		mrf.GetTracks(bestTracks, false, args)
 	},
 }
 
