@@ -19,7 +19,7 @@ func TestGetBearerToken(t *testing.T) {
 		}
 	})
 
-	service := NewService(client)
+	service := NewAlbumService([]string{"Phoenix"}, client)
 
 	response, err := service.GetBearerToken()
 
@@ -54,9 +54,9 @@ func TestGetArtistIdHappyPath(t *testing.T) {
 		}
 	})
 
-	service := NewService(client)
+	service := NewAlbumService([]string{"Michael", "Galasso"}, client)
 
-	response, err := service.GetArtistID([]string{"Michael", "Galaso"})
+	response, err := service.GetArtistID()
 
 	assert.NoError(t, err)
 	assert.NotNil(t, response)
@@ -82,9 +82,9 @@ func TestGetArtistIdUnhappyPath(t *testing.T) {
 		}
 	})
 
-	service := NewService(client)
+	service := NewAlbumService([]string{"Mgwdfdfgjdn"}, client)
 
-	response, err := service.GetArtistID([]string{"Michael", "Galaso"})
+	response, err := service.GetArtistID()
 
 	assert.Error(t, err)
 	assert.Empty(t, response)

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/sevens7xix/mrf/internal/utilities"
 )
 
 func (s *Service) createTracksRequest(URL string) (*http.Request, error) {
@@ -56,23 +58,7 @@ func (s *Service) GetProcessedItems() (string, error) {
 		return "", fmt.Errorf("something wrong happened decoding the response '%s'", err)
 	}
 
-	track_names = ProcessTitleTracks(s.Model.GetItems())
-
-	/*
-		if _, ok := s.Model.(model.Albums); ok {
-			var DecoyModel model.Albums
-
-			err = json.NewDecoder(response.Body).Decode(&DecoyModel)
-
-			if err != nil {
-				return "", fmt.Errorf("something wrong happened decoding the response '%s'", err)
-			}
-
-			track_names = ProcessTitleTracks(DecoyModel.GetItems())
-		} else {
-			track_names = "Nothing rigth now"
-		}
-	*/
+	track_names = utilities.ProcessTitleTracks(s.Model.GetItems())
 
 	return track_names, nil
 }
