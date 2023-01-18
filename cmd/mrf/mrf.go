@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	version    = "0.0.1"
-	bestTracks bool
+	version       = "0.0.1"
+	bestTracks    bool
+	printResponse bool
 )
 
 var rootCMD = &cobra.Command{
@@ -19,13 +20,14 @@ var rootCMD = &cobra.Command{
 	Version: version,
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-
-		mrf.GetTracks(bestTracks, false, args)
+		mrf.GetTracks(bestTracks, printResponse, args)
 	},
 }
 
 func Execute() {
 	rootCMD.PersistentFlags().BoolVarP(&bestTracks, "best", "b", false, "To get the best tracks from the desired artist")
+	rootCMD.PersistentFlags().BoolVarP(&printResponse, "print", "p", false, "To print the fetch result on a file")
+
 	if err := rootCMD.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR: There was an error executing mrf '%s'", err)
 		os.Exit(1)
