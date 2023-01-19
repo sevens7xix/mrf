@@ -84,7 +84,7 @@ func (s *Service) GetArtistID() (string, error) {
 	json.NewDecoder(response.Body).Decode(&result)
 
 	if len(result.Artists.Items) == 0 {
-		return "", fmt.Errorf("'%d' artist found for this query", len(result.Artists.Items))
+		return "", fmt.Errorf("%d artist found for this query", len(result.Artists.Items))
 	}
 
 	return result.Artists.Items[0].Href, nil
