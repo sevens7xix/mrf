@@ -19,7 +19,7 @@ func (s *Service) createTracksRequest(URL string) (*http.Request, error) {
 	bearerToken, err := s.GetBearerToken()
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("an error happened with the token '%s'", err)
 	}
 
 	req.Header.Add("Accept", "application/json")
@@ -50,15 +50,13 @@ func (s *Service) GetProcessedItems() (string, error) {
 		return "", fmt.Errorf("something wrong happened getting the API response '%s'", err)
 	}
 
-	var track_names string
-
 	err = json.NewDecoder(response.Body).Decode(&s.Model)
 
 	if err != nil {
 		return "", fmt.Errorf("something wrong happened decoding the response '%s'", err)
 	}
 
-	track_names = utilities.ProcessTitleTracks(s.Model.GetItems())
+	track_names := utilities.ProcessTitleTracks(s.Model.GetItems())
 
 	return track_names, nil
 }

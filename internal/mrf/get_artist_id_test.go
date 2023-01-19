@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/sevens7xix/mrf/internal/utilities"
@@ -16,11 +17,56 @@ var client, badClient *http.Client
 func TestMain(m *testing.M) {
 
 	client = utilities.NewTestClient(func(req *http.Request) *http.Response {
-		if req.URL.String() == "https://accounts.spotify.com/api/token" {
+
+		request_string := req.URL.String()
+
+		if request_string == "https://accounts.spotify.com/api/token" {
 			return &http.Response{
 				StatusCode: 200,
 				Body:       io.NopCloser(bytes.NewBufferString(`{"access_token":"Getting credentials..."}`)),
 				Header:     make(http.Header),
+			}
+		} else if strings.Contains(request_string, "albums?market=US&limit=5") {
+			return &http.Response{
+				StatusCode: 404,
+				Body: io.NopCloser(bytes.NewBufferString(`{
+					"href": "https://api.spotify.com/v1/artists/0EmeFodog0BfCgMzAIvKQp/albums?offset=0&limit=20&include_groups=album,single,compilation,appears_on&locale=en-US,en;q=0.5",
+					"items": [
+					  {
+						"album_group": "album",
+						"album_type": "album",
+						"artists": [
+						  {
+							"external_urls": {
+							  "spotify": "https://open.spotify.com/artist/0EmeFodog0BfCgMzAIvKQp"
+							},
+							"href": "https://api.spotify.com/v1/artists/0EmeFodog0BfCgMzAIvKQp",
+							"id": "0EmeFodog0BfCgMzAIvKQp",
+							"name": "Shakira",
+							"type": "artist",
+							"uri": "spotify:artist:0EmeFodog0BfCgMzAIvKQp"
+						  }
+						],
+						"external_urls": {
+						  "spotify": "https://open.spotify.com/album/6WaruQqgJzSlSzZz2YdUku"
+						},
+						"href": "https://api.spotify.com/v1/albums/6WaruQqgJzSlSzZz2YdUku",
+						"id": "6WaruQqgJzSlSzZz2YdUku",
+						"name": "Laundry Service: Washed and Dried (Expanded Edition)",
+						"release_date": "2021-11-12",
+						"release_date_precision": "day",
+						"total_tracks": 17,
+						"type": "album",
+						"uri": "spotify:album:6WaruQqgJzSlSzZz2YdUku"
+					  }
+					],
+					"limit": 20,
+					"next": "https://api.spotify.com/v1/artists/0EmeFodog0BfCgMzAIvKQp/albums?offset=20&limit=20&include_groups=album,single,compilation,appears_on&locale=en-US,en;q=0.5",
+					"offset": 0,
+					"previous": null,
+					"total": 548
+				  }`)),
+				Header: make(http.Header),
 			}
 		} else {
 			return &http.Response{
