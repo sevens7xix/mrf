@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetBearerToken(t *testing.T) {
+func TestGetBearerTokenHappyPath(t *testing.T) {
 	client := utilities.NewTestClient(func(req *http.Request) *http.Response {
 		return &http.Response{
 			StatusCode: 200,
@@ -28,29 +28,55 @@ func TestGetBearerToken(t *testing.T) {
 	assert.Equal(t, "Getting credentials...", response)
 }
 
-func TestGetArtistIdHappyPath(t *testing.T) {
+func TestGetBearerTokenUnHappyPath(t *testing.T) {
 	client := utilities.NewTestClient(func(req *http.Request) *http.Response {
 		return &http.Response{
-			StatusCode: 200,
-			Body: io.NopCloser(bytes.NewBufferString(`{
-				"artists": {
-				  "href": "https://api.spotify.com/v1/search?query=michael+galaso&type=artist&locale=en-US%2Cen%3Bq%3D0.5&offset=0&limit=20",
-				  "items": [
-					{
-					  "href": "https://api.spotify.com/v1/artists/0zwktRkdtjFn2F8v9kUdlF",
-					  "id": "0zwktRkdtjFn2F8v9kUdlF",
-					  "name": "Michael Galasso",
-					  "uri": "spotify:artist:0zwktRkdtjFn2F8v9kUdlF"
+			StatusCode: 404,
+			Body:       io.NopCloser(bytes.NewBufferString(`{"error":"invalid_client"}`)),
+			Header:     make(http.Header),
+		}
+	})
+
+	service := NewAlbumService([]string{"Phoenix"}, client)
+
+	response, err := service.GetBearerToken()
+
+	assert.Error(t, err)
+	assert.Empty(t, response)
+}
+
+func TestGetArtistIdHappyPath(t *testing.T) {
+
+	client := utilities.NewTestClient(func(req *http.Request) *http.Response {
+		if req.URL.String() == "https://accounts.spotify.com/api/token" {
+			return &http.Response{
+				StatusCode: 200,
+				Body:       io.NopCloser(bytes.NewBufferString(`{"access_token":"Getting credentials..."}`)),
+				Header:     make(http.Header),
+			}
+		} else {
+			return &http.Response{
+				StatusCode: 200,
+				Body: io.NopCloser(bytes.NewBufferString(`{
+					"artists": {
+					  "href": "https://api.spotify.com/v1/search?query=michael+galaso&type=artist&locale=en-US%2Cen%3Bq%3D0.5&offset=0&limit=20",
+					  "items": [
+						{
+						  "href": "https://api.spotify.com/v1/artists/0zwktRkdtjFn2F8v9kUdlF",
+						  "id": "0zwktRkdtjFn2F8v9kUdlF",
+						  "name": "Michael Galasso",
+						  "uri": "spotify:artist:0zwktRkdtjFn2F8v9kUdlF"
+						}
+					  ],
+					  "limit": 20,
+					  "next": "https://api.spotify.com/v1/search?query=michael+galaso&type=artist&locale=en-US%2Cen%3Bq%3D0.5&offset=20&limit=20",
+					  "offset": 0,
+					  "previous": null,
+					  "total": 36
 					}
-				  ],
-				  "limit": 20,
-				  "next": "https://api.spotify.com/v1/search?query=michael+galaso&type=artist&locale=en-US%2Cen%3Bq%3D0.5&offset=20&limit=20",
-				  "offset": 0,
-				  "previous": null,
-				  "total": 36
-				}
-			  }`)),
-			Header: make(http.Header),
+				  }`)),
+				Header: make(http.Header),
+			}
 		}
 	})
 

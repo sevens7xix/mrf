@@ -3,6 +3,7 @@ package mrf
 import (
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -46,11 +47,17 @@ func (s *Service) GetBearerToken() (string, error) {
 
 	defer response.Body.Close()
 
-	var result map[string]string
+	var result map[string]interface{}
 
 	json.NewDecoder(response.Body).Decode(&result)
 
-	return result["access_token"], nil
+	access_token := result["access_token"]
+
+	if access_token == nil {
+		return "", errors.New("error getting the credentials")
+	}
+
+	return access_token.(string), nil
 }
 
 func (s *Service) GetArtistID() (string, error) {
@@ -58,21 +65,11 @@ func (s *Service) GetArtistID() (string, error) {
 	artist_query := utilities.StringFormatter(s.Artist)
 
 	url := fmt.Sprintf("https://api.spotify.com/v1/search?q=%s&type=artist", artist_query)
-	request, err := http.NewRequest("GET", url, nil)
+	request, err := s.createTracksRequest(url)
 
 	if err != nil {
 		return "", err
 	}
-
-	bearerToken, err := s.GetBearerToken()
-
-	if err != nil {
-		return "", err
-	}
-
-	request.Header.Add("Accept", "application/json")
-	request.Header.Add("Content-Type", "application/json")
-	request.Header.Add("Authorization", fmt.Sprintf("Bearer %s", bearerToken))
 
 	response, err := s.Client.Do(request)
 
