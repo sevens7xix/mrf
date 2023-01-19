@@ -39,3 +39,20 @@ func TestGetProcessedItems(t *testing.T) {
 		"=======================TRACKLIST=======================\n- Laundry Service: Washed and Dried (Expanded Edition).\n",
 		response)
 }
+
+func TestGetProcessedItemsGetsNoArtist(t *testing.T) {
+	service := NewAlbumService([]string{"Shakira"}, badClient)
+
+	response, err := service.GetProcessedItems()
+
+	assert.Error(t, err)
+	assert.Empty(t, response)
+}
+
+func BenchmarkResponse(b *testing.B) {
+	service := NewAlbumService([]string{"Radiohead"}, client)
+
+	for i := 0; i < b.N; i++ {
+		service.GetProcessedItems()
+	}
+}
