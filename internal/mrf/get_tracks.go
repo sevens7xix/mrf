@@ -3,6 +3,10 @@ package mrf
 import (
 	"fmt"
 	"log"
+	"os"
+	"strings"
+
+	"github.com/sevens7xix/mrf/internal/utilities"
 )
 
 func GetTracks(bestFlag bool, printFlag bool, args []string) {
@@ -13,18 +17,25 @@ func GetTracks(bestFlag bool, printFlag bool, args []string) {
 		return
 	}
 
-	album_names, err := service.GetProcessedItems()
+	tracklist, err := service.GetProcessedItems()
 
 	if err != nil {
 		log.Fatalf("Something happened parsing the items result '%s'", err)
 		return
 	}
 
-	fmt.Print(album_names)
-}
+	if printFlag {
+		f, err := os.Create(fmt.Sprintf("%s.txt", strings.Join(args, "_")))
 
-/*
-func PrintTracks(w io.Writer, request string) {
+		if err != nil {
+			if err != nil {
+				log.Fatalf("Something wrong happened creating the file '%s'", err)
+				return
+			}
+		}
 
+		utilities.PrintTracks(f, tracklist)
+	} else {
+		utilities.PrintTracks(os.Stdout, tracklist)
+	}
 }
-*/

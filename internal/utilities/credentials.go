@@ -1,19 +1,8 @@
 package utilities
 
 import (
-	"strings"
-
 	"github.com/spf13/viper"
 )
-
-func StringFormatter(rawString []string) string {
-
-	if len(rawString) > 1 {
-		return strings.Join(rawString, "+")
-	} else {
-		return rawString[0]
-	}
-}
 
 func GetCredentials() ([]string, error) {
 	// Here we're going to retreive the credentials on the .env file using viper
