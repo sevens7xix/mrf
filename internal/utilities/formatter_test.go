@@ -26,9 +26,15 @@ func TestFormmater(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.test_name, func(t *testing.T) {
-			if got := StringFormatter(test.cue); got != test.expected {
-				t.Errorf("Wanted: %s, Got: %s", test.expected, got)
-			}
+			AssertEqual(t, StringFormatter(test.cue), test.expected)
 		})
+	}
+}
+
+func AssertEqual[T comparable](t *testing.T, got, wanted T) {
+	t.Helper()
+
+	if got != wanted {
+		t.Errorf("Wanted: %v, Got: %v", wanted, got)
 	}
 }
