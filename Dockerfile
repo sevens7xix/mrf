@@ -8,7 +8,6 @@ COPY go.sum ./
 RUN go mod download
 
 COPY . /app
-COPY *.env /app
 
 RUN go build -o /mrf
 
