@@ -10,7 +10,8 @@ func GetCredentials() ([]string, error) {
 
 	viper.SetConfigName("credentials")
 	viper.SetConfigType("env")
-	viper.AddConfigPath("../")
+	viper.AddConfigPath("./")
+	viper.AddConfigPath("$HOME/mrf")
 	viper.AddConfigPath("/app")
 
 	err := viper.ReadInConfig()
